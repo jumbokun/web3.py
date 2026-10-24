@@ -906,7 +906,7 @@ The following methods are available on the ``web3.eth`` namespace.
     can be accessed via the ``data`` attribute on ``ContractLogicError``.
 
 
-.. py:method:: Eth.simulateV1(payload, block_identifier)
+.. py:method:: Eth.simulate_v1(payload, block_identifier)
 
     * Delegates to ``eth_simulateV1`` RPC Method
 
@@ -914,7 +914,7 @@ The following methods are available on the ``web3.eth`` namespace.
 
     .. code-block:: python
 
-        >>> w3.eth.simulateV1(
+        >>> w3.eth.simulate_v1(
         ...   {
         ...     "blockStateCalls": [
         ...       {
