@@ -5,6 +5,7 @@ from eth_typing import (
 )
 
 from web3._utils.method_formatters import (
+    PYTHONIC_RESULT_FORMATTERS,
     get_error_formatters,
     raise_contract_logic_error_on_revert,
     storage_key_to_hexstr,
@@ -236,3 +237,26 @@ def test_storage_key_to_hexstr(input_value, expected_output):
             storage_key_to_hexstr(input_value)
     else:
         assert storage_key_to_hexstr(input_value) == expected_output
+
+
+@pytest.mark.parametrize(
+    "method, result, extract",
+    (
+        (
+            RPC.eth_getTransactionByHash,
+            {"blockNumber": "0x2", "blockTimestamp": "0x6add7356"},
+            lambda formatted: formatted,
+        ),
+        (
+            RPC.eth_getLogs,
+            [{"blockNumber": "0x2", "blockTimestamp": "0x6add7356", "logIndex": "0x0"}],
+            lambda formatted: formatted[0],
+        ),
+    ),
+    ids=["transaction", "log"],
+)
+def test_result_formatters_format_block_timestamp(method, result, extract):
+    formatted = extract(PYTHONIC_RESULT_FORMATTERS[method](result))
+
+    assert formatted["blockNumber"] == 2
+    assert formatted["blockTimestamp"] == 0x6ADD7356

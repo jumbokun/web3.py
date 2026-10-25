@@ -122,6 +122,7 @@ TxData = TypedDict(
         "blobVersionedHashes": Sequence[HexBytes],
         "blockHash": HexBytes,
         "blockNumber": BlockNumber,
+        "blockTimestamp": Timestamp,
         "chainId": int,
         "data": bytes | HexStr,
         "from": ChecksumAddress,
@@ -229,6 +230,7 @@ class LogReceipt(TypedDict):
     address: ChecksumAddress
     blockHash: HexBytes
     blockNumber: BlockNumber
+    blockTimestamp: NotRequired[Timestamp]
     data: HexBytes
     logIndex: int
     removed: bool

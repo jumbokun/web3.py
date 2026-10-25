@@ -259,6 +259,7 @@ AUTH_LIST_RESULT_FORMATTER = apply_formatter_if(
 TRANSACTION_RESULT_FORMATTERS: dict[str, Callable[..., Any]] = {
     "blockHash": apply_formatter_if(is_not_null, to_hexbytes(32)),
     "blockNumber": apply_formatter_if(is_not_null, to_integer_if_hex),
+    "blockTimestamp": apply_formatter_if(is_not_null, to_integer_if_hex),
     "transactionIndex": apply_formatter_if(is_not_null, to_integer_if_hex),
     "nonce": to_integer_if_hex,
     "gas": to_integer_if_hex,
@@ -310,6 +311,7 @@ withdrawal_result_formatter = type_aware_apply_formatters_to_dict(
 LOG_ENTRY_FORMATTERS = {
     "blockHash": apply_formatter_if(is_not_null, to_hexbytes(32)),
     "blockNumber": apply_formatter_if(is_not_null, to_integer_if_hex),
+    "blockTimestamp": apply_formatter_if(is_not_null, to_integer_if_hex),
     "transactionIndex": apply_formatter_if(is_not_null, to_integer_if_hex),
     "transactionHash": apply_formatter_if(is_not_null, to_hexbytes(32)),
     "logIndex": to_integer_if_hex,
