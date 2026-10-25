@@ -456,7 +456,13 @@ transaction_pool_inspect_formatter = type_aware_apply_formatters_to_dict(
 
 FEE_HISTORY_FORMATTERS = {
     "baseFeePerGas": apply_formatter_to_array(to_integer_if_hex),
+    "baseFeePerBlobGas": apply_formatter_if(
+        is_not_null, apply_formatter_to_array(to_integer_if_hex)
+    ),
     "gasUsedRatio": apply_formatter_if(is_not_null, apply_formatter_to_array(float)),
+    "blobGasUsedRatio": apply_formatter_if(
+        is_not_null, apply_formatter_to_array(float)
+    ),
     "oldestBlock": to_integer_if_hex,
     "reward": apply_formatter_if(
         is_not_null,

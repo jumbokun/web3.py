@@ -5,6 +5,7 @@ from eth_typing import (
 )
 
 from web3._utils.method_formatters import (
+    PYTHONIC_RESULT_FORMATTERS,
     get_error_formatters,
     raise_contract_logic_error_on_revert,
     storage_key_to_hexstr,
@@ -236,3 +237,35 @@ def test_storage_key_to_hexstr(input_value, expected_output):
             storage_key_to_hexstr(input_value)
     else:
         assert storage_key_to_hexstr(input_value) == expected_output
+
+
+FEE_HISTORY_RESULT = {
+    "oldestBlock": "0x2",
+    "baseFeePerGas": ["0x342770c0", "0x2da282a8", "0x27ee3253"],
+    "gasUsedRatio": [0.0, 0.5],
+    "baseFeePerBlobGas": ["0x1", "0x1", "0x3"],
+    "blobGasUsedRatio": [0.0, 1.0],
+    "reward": [["0x0"], ["0x3b9aca00"]],
+}
+
+
+def test_fee_history_result_formatter_formats_blob_fields():
+    formatted = PYTHONIC_RESULT_FORMATTERS[RPC.eth_feeHistory](FEE_HISTORY_RESULT)
+
+    assert formatted["baseFeePerGas"] == [875000000, 765625000, 669921875]
+    assert formatted["baseFeePerBlobGas"] == [1, 1, 3]
+    assert formatted["blobGasUsedRatio"] == [0.0, 1.0]
+
+
+def test_fee_history_result_formatter_without_blob_fields():
+    result = {
+        key: value
+        for key, value in FEE_HISTORY_RESULT.items()
+        if key not in ("baseFeePerBlobGas", "blobGasUsedRatio")
+    }
+
+    formatted = PYTHONIC_RESULT_FORMATTERS[RPC.eth_feeHistory](result)
+
+    assert "baseFeePerBlobGas" not in formatted
+    assert "blobGasUsedRatio" not in formatted
+    assert formatted["oldestBlock"] == 2

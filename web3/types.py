@@ -360,6 +360,9 @@ class FeeHistory(TypedDict):
     gasUsedRatio: list[float]
     oldestBlock: BlockNumber
     reward: list[list[Wei]]
+    # Returned by nodes that support EIP-4844.
+    baseFeePerBlobGas: NotRequired[list[Wei]]
+    blobGasUsedRatio: NotRequired[list[float]]
 
 
 class StateOverrideParams(TypedDict, total=False):
